@@ -10,9 +10,6 @@ describe Oystercard do
       expect(subject.balance).to eq(0)
     end
 
-    it 'should have an empty journeys array on initialization' do
-      expect(subject.journeys).to be_empty
-    end
   end
 
   describe '#top_up' do
@@ -57,7 +54,7 @@ describe Oystercard do
     end
 
     it 'reduces the @balance by minimum fare' do
-      expect { subject.touch_out(exit_station) }.to change{subject.balance}.by(-subject.journey_class::FARE)
+      expect { subject.touch_out(exit_station) }.to change{subject.balance}.by(-Journey::FARE)
     end
 
     it 'changes entry_station to nil' do

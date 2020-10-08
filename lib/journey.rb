@@ -4,18 +4,17 @@ class Journey
 
   attr_reader :entry_station, :exit_station
 
-  def initialize
-    @entry_station = nil
-    @exit_station = nil
-    # @current_journey = {entry: entry_station, exit: exit_station}
+  def initialize(entry_station=nil)
+    @entry_station = entry_station
+    @journey = {entry_station: @entry_station, exit_station: nil}
   end
 
-  def start(station)
-    @entry_station = station
+  def start(entry_station)
+    @journey[:entry_station] = entry_station
   end
 
-  def finish(station)
-    @exit_station = station
+  def finish(exit_station)
+    @journey[:exit_station] = exit_station
   end
 
   def fare 
@@ -23,7 +22,7 @@ class Journey
   end
 
   def complete?
-    @entry_station && @exit_station
+    @journey[:entry_station] && @journey[:exit_station]
   end
 
 end

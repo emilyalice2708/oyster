@@ -1,12 +1,14 @@
+require_relative 'journey'
+require_relative 'journey_log'
+
 class Oystercard
   CARD_LIMIT = 90
-  attr_reader :balance, :entry_station, :journeys, :journey_class
+  attr_reader :balance, :entry_station, :journey_class
 
-  def initialize(journey_class = Journey)
+  def initialize(journeys = JourneyLog.new)
     @balance = 0
     @entry_station = nil
-    @journeys = []
-    @journey_class = journey_class
+    @journeys = journeys
   end
 
   def top_up(money)
@@ -18,21 +20,18 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise "Balance too low." if @balance < @journey_class::FARE
+    raise "Balance too low." if @balance < Journey::FARE
     @entry_station = station
+    @journeys.start_journey(station)
   end
 
   def touch_out(exit_station)
-    deduct(@journey_class::FARE)
-    create_journey(exit_station)
+    deduct(Journey::FARE)
+    @journeys.finish_journey(exit_station)
     @entry_station = nil
   end
 
   private
-
-  def create_journey(exit_station)
-    @journeys << @journey_class.new(@entry_station, exit_station)
-  end
 
   def exceeded?(money)
     ((@balance + money) >= CARD_LIMIT )
