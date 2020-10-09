@@ -12,7 +12,6 @@ describe Journey do
   end
 
   context "given entry station" do
-
     it 'has entry station' do
       expect(new_journey.entry_station).to eq(station)
     end
@@ -23,8 +22,7 @@ describe Journey do
     end
 
     it "returns penalty when no exit given" do
-      journey.start(station)
-      expect(journey.fare).to eq(Journey::PENALTY)
+      expect(new_journey.fare).to eq(Journey::PENALTY)
     end
   end
 

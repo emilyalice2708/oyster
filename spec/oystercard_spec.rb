@@ -9,7 +9,6 @@ describe Oystercard do
     it 'should have balance of 0 on initialization' do
       expect(subject.balance).to eq(0)
     end
-
   end
 
   describe '#top_up' do
@@ -22,30 +21,12 @@ describe Oystercard do
     end
   end
 
-  describe '#in_journey?' do
-    it 'returns false on initialization' do
-      expect(subject.in_journey?).to be false
-    end
-  end
 
   describe '#touch_in' do
-    it 'changes value of in_use to true' do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
-      expect(subject.in_journey?).to be true
-    end
-
     it "raises an error if card balance too low" do
       expect { subject.touch_in(entry_station) }.to raise_error("Balance too low.")
     end
-
-    it "remembers the entry station" do
-      subject.top_up(5)
-      subject.touch_in(entry_station)
-      expect(subject.entry_station).to eq(entry_station)
-    end
   end
-  
 
   describe '#touch_out' do
     before do
@@ -55,11 +36,6 @@ describe Oystercard do
 
     it 'reduces the @balance by minimum fare' do
       expect { subject.touch_out(exit_station) }.to change{subject.balance}.by(-Journey::FARE)
-    end
-
-    it 'changes entry_station to nil' do
-      subject.touch_out(exit_station)
-      expect(subject.entry_station).to eq(nil)
     end
 
   end

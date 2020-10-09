@@ -3,32 +3,30 @@ require_relative 'journey_log'
 
 class Oystercard
   CARD_LIMIT = 90
-  attr_reader :balance, :entry_station, :journey_class
+  attr_reader :balance, :entry_station, :journeys
 
   def initialize(journeys = JourneyLog.new)
     @balance = 0
-    @entry_station = nil
     @journeys = journeys
+  end
+
+  def view_journeys
+    @journeys.journeys
   end
 
   def top_up(money)
     exceeded?(money) ? exceeded_error : @balance += money
   end
 
-  def in_journey?
-    @entry_station != nil
-  end
-
   def touch_in(station)
     raise "Balance too low." if @balance < Journey::FARE
-    @entry_station = station
+    
     @journeys.start_journey(station)
   end
 
   def touch_out(exit_station)
     deduct(Journey::FARE)
     @journeys.finish_journey(exit_station)
-    @entry_station = nil
   end
 
   private
